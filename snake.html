@@ -221,7 +221,7 @@
     const overlayBtn   = document.getElementById('overlay-btn');
     const pauseBtn     = document.getElementById('pause-btn');
 
-    best = parseInt(localStorage.getItem('snakeBest') || '0');
+    try { best = parseInt(localStorage.getItem('snakeBest') || '0'); } catch(e) { best = 0; }
     bestEl.textContent = best;
 
     function init() {
@@ -392,7 +392,7 @@
       }
 
       scoreEl.textContent = score;
-      if (score > best) { best = score; bestEl.textContent = best; localStorage.setItem('snakeBest', best); }
+      if (score > best) { best = score; bestEl.textContent = best; try { localStorage.setItem('snakeBest', best); } catch(e) {} }
     }
 
     let bonusTimer = null;
@@ -433,6 +433,7 @@
     }
 
     overlayBtn.addEventListener('click', startGame);
+    overlayBtn.addEventListener('touchstart', e => { e.preventDefault(); startGame(); }, {passive: false});
 
     pauseBtn.addEventListener('click', () => {
       if (!running) return;
